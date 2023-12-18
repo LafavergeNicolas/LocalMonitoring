@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  grafana:
+    image: grafana/grafana:10.2.0-ubuntu
+    ports:
+      - 3000:3000
+    volumes:
+      - ./docker-data/grafana-data:/var/lib/grafana
+      - ./config/grafana.ini:/etc/grafana/grafana.ini
+      - ./config/grafana.db:/var/lib/grafana/grafana.db
+        
+  prometheus:
+    image: prom/prometheus:v2.30.2
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker-data/prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+
+  node_exporter:
+    image: prom/node-exporter:v1.2.2
+    ports:
+      - 9100:9100
